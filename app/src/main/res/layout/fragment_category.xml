@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Pick your\ncategory of interest"
+        android:text="@string/pick_your_ncategory_of_interest"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold" />

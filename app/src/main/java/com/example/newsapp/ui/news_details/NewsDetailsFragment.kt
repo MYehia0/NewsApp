@@ -49,15 +49,23 @@ class NewsDetailsFragment : Fragment() {
 
 
     ////////////////////////////////////////////////////////////
-    override fun onStop() {
-        super.onStop()
-        Log.e("NDSTOP", "NDSTOP")
+    var onStartNewsDetailsListener: OnStartNewsDetailsListener? = null
+
+    interface OnStartNewsDetailsListener {
+        fun onStartNewsDetails()
     }
 
     override fun onStart() {
         super.onStart()
         Log.e("NDSTART", "NDSTART")
+        onStartNewsDetailsListener?.let { it.onStartNewsDetails() }
     }
+
+    override fun onStop() {
+        super.onStop()
+        Log.e("NDSTOP", "NDSTOP")
+    }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

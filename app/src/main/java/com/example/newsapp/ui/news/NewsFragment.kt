@@ -31,6 +31,7 @@ class NewsFragment : Fragment() {
     lateinit var source: SourcesItem
     val adapter = NewsAdapter(null)
     lateinit var binding: FragmentNewsBinding
+    var flag = false
     var onItemNewsListener: OnItemNewsListener? = null
 
     interface OnItemNewsListener {
@@ -51,7 +52,9 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("NFVCREAT", "NFVCREAT")
         binding.newsRecycler.adapter = adapter
-        loadNews()
+        if (!flag) {
+            loadNews()
+        }
         adapter.onItemClickListener = object : NewsAdapter.OnItemClickListener {
             override fun onItemClick(article: ArticlesItem) {
                 onItemNewsListener?.let {
@@ -63,7 +66,6 @@ class NewsFragment : Fragment() {
 
     private fun loadNews() {
         showLoadingLayout()
-
         // call news api
         ApiManager.getApis()
             .getNews(Constants.apiKey, source.id)
@@ -119,6 +121,7 @@ class NewsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.e("NFResume", "NFResume")
+        flag = false
     }
 
     override fun onPause() {
@@ -129,6 +132,7 @@ class NewsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         Log.e("NFSTOP", "NFSTOP")
+        flag = true
     }
 
     override fun onAttach(context: Context) {

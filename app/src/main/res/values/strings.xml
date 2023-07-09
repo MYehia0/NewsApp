@@ -7,4 +7,16 @@
     <string name="navigation_open">open</string>
     <string name="news">News</string>
     <string name="news_content">News Content</string>
+    <string name="sports">Sports</string>
+    <string name="technology">Technology</string>
+    <string name="health">Health</string>
+    <string name="business">Business</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="science">Science</string>
+    <string name="pick_your_ncategory_of_interest">Pick your\ncategory of interest</string>
+    <string name="language">Language</string>
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>Arabic</item>
+    </string-array>
 </resources>

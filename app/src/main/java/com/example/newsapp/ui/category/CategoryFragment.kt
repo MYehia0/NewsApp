@@ -85,5 +85,4 @@ class CategoryFragment : Fragment() {
         Log.e("CFCreate", "CFCreate")
     }
 
-
 }
