@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.example.newsapp.Constants
 import com.example.newsapp.R
 import com.example.newsapp.api.ApiManager
-import com.example.newsapp.api.Constants
 import com.example.newsapp.api.model.ArticlesItem
 import com.example.newsapp.api.model.SourcesItem
 import com.example.newsapp.api.model.SourcesResponse
@@ -184,14 +184,12 @@ class CategoryDetailsFragment : Fragment() {
         binding.errorLayout.isVisible = false
     }
 
-
-    //////////////////////////////////////////////////
     var onStartCategoryDetailsListener: OnStartCategoryDetailsListener? = null
-
     interface OnStartCategoryDetailsListener {
         fun onStartCategoryDetails(category: Category)
     }
 
+    /////////////////// Test Life Cycle ///////////////////
     override fun onStart() {
         super.onStart()
         Log.e("CDSTART", "CDSTART")

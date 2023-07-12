@@ -48,9 +48,7 @@ class NewsDetailsFragment : Fragment() {
     }
 
 
-    ////////////////////////////////////////////////////////////
     var onStartNewsDetailsListener: OnStartNewsDetailsListener? = null
-
     interface OnStartNewsDetailsListener {
         fun onStartNewsDetails()
     }
@@ -66,7 +64,7 @@ class NewsDetailsFragment : Fragment() {
         Log.e("NDSTOP", "NDSTOP")
     }
 
-
+    /////////////////// Test Life Cycle ///////////////////
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.e("NDAttach", "NDAttach")

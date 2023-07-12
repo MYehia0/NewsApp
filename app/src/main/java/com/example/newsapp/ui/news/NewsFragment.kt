@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.example.newsapp.Constants
 import com.example.newsapp.api.ApiManager
-import com.example.newsapp.api.Constants
 import com.example.newsapp.api.model.ArticlesItem
 import com.example.newsapp.api.model.NewsResponse
 import com.example.newsapp.api.model.SourcesItem
@@ -112,7 +112,7 @@ class NewsFragment : Fragment() {
     }
 
 
-    ////////////////////////////////////
+    /////////////////// Test Life Cycle ///////////////////
     override fun onStart() {
         super.onStart()
         Log.e("NFSTART", "NFSTART")

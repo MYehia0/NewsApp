@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentSettingsBinding
+import java.util.*
 
 class SettingsFragment : Fragment() {
     lateinit var binding: FragmentSettingsBinding
@@ -65,11 +66,9 @@ class SettingsFragment : Fragment() {
     }
 
     var onLanguageClickListener: OnLanguageClickListener? = null
-
     interface OnLanguageClickListener {
         fun onLanguageClick(language: String)
     }
-
 
 }
 
