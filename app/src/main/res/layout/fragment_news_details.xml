@@ -58,7 +58,7 @@
                 android:layout_height="0dp"
                 android:fillViewport="true"
                 android:scrollbars="vertical"
-                app:layout_constraintBottom_toTopOf="@id/btn_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
@@ -71,19 +71,20 @@
                     tools:text="Content" />
             </ScrollView>
 
-            <Button
-                android:id="@+id/btn_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/trans"
-                android:drawableEnd="@drawable/ic_play"
-                android:text="View Full Article"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/SCROLLER_ID" />
+            <!--            <Button-->
+            <!--                android:id="@+id/btn_content"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@color/trans"-->
+            <!--                android:drawableEnd="@drawable/ic_play"-->
+            <!--                android:text="View Full Article"-->
+            <!--                android:textAllCaps="false"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="16sp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/SCROLLER_ID" />-->
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

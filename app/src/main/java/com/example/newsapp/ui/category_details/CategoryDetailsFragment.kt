@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.example.newsapp.Constants
 import com.example.newsapp.R
 import com.example.newsapp.api.ApiManager
-import com.example.newsapp.api.Constants
 import com.example.newsapp.api.model.ArticlesItem
 import com.example.newsapp.api.model.SourcesItem
 import com.example.newsapp.api.model.SourcesResponse
@@ -36,6 +36,8 @@ class CategoryDetailsFragment : Fragment() {
 
     var category: Category? = null
     var tabIndex: Int = 0
+    var flag = false
+    lateinit var sourcesList: List<SourcesItem?>
     lateinit var binding: FragmentCategoryDetailsBinding
     var onNewsDetailsListener: OnNewsDetailsListener? = null
 
@@ -57,7 +59,11 @@ class CategoryDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e("CDVCREAT", "CDVCREAT")
-        loadSources()
+        if (flag) {
+            bindSourcesInTabs(sourcesList)
+        } else {
+            loadSources()
+        }
     }
 
     private fun changeNewsFragment(source: SourcesItem) {
@@ -76,9 +82,7 @@ class CategoryDetailsFragment : Fragment() {
     }
 
     private fun loadSources() {
-
         showLoadingLayout()
-
         // call news api
         ApiManager.getApis()
             .getSourcesByCategory(Constants.apiKey, category?.id)
@@ -92,7 +96,9 @@ class CategoryDetailsFragment : Fragment() {
 
                     // response Success or not
                     if (response.isSuccessful) {
-                        bindSourcesInTabs(response.body()?.sources)
+                        sourcesList = response.body()?.sources!!
+                        Log.e("Bind", "")
+                        bindSourcesInTabs(sourcesList)
                     } else {
                         // message error from json to sourceResponse object
                         val gson = Gson()
@@ -114,6 +120,7 @@ class CategoryDetailsFragment : Fragment() {
     }
 
     private fun bindSourcesInTabs(sourcesList: List<SourcesItem?>?) {
+        selectTab()
         sourcesList?.forEach {
             val tab = binding.tabLayout.newTab()
             tab.text = it?.name
@@ -123,35 +130,48 @@ class CategoryDetailsFragment : Fragment() {
             layoutParams.setMargins(20, 15, 20, 15)
             tab.view.layoutParams = layoutParams
         }
+        binding.tabLayout.selectTab(binding.tabLayout.getTabAt(tabIndex))
+        Log.e("select", "")
+        flag = false
+    }
 
+    private fun selectTab() {
         binding.tabLayout
             .addOnTabSelectedListener(object : OnTabSelectedListener {
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
-                    tabIndex = tab?.position!!
-//                    binding.tabLayout.selectTab(tab)
-                    if (tabIndex == 0 && !flag) {
-                        val source = tab?.tag as SourcesItem
+                    if (tab?.position == 0 && !flag) {
+                        val source = tab.tag as SourcesItem
                         changeNewsFragment(source)
+//                        tabIndex = tab?.position!!
+                        Log.e("onReCondition", "1")
+                    } else if (tabIndex == tab?.position && !flag) {
+                        val source = tab.tag as SourcesItem
+                        changeNewsFragment(source)
+                        Log.e("onReCondition", "2")
                     }
-                    flag = false
+                    Log.e("onTabReselected", "onTabReselected")
                 }
 
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    tabIndex = tab?.position!!
-                    if (!flag) {
+                    if (tabIndex != tab?.position && tab?.position != 0) {
                         val source = tab?.tag as SourcesItem
                         changeNewsFragment(source)
+                        tabIndex = tab?.position!!
+                        Log.e("onTabCondition", "1")
+                    } else if (tab?.position == 0 && !flag) {
+                        val source = tab?.tag as SourcesItem
+                        changeNewsFragment(source)
+                        tabIndex = tab?.position!!
+                        Log.e("onTabCondition", "2")
                     }
-                    flag = false
-                    Log.e("onTabSelected", "onTabSelected")
+                    Log.e("onTabSelected", tab?.position.toString() + " ${flag}")
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
 
                 }
             })
-        binding.tabLayout.getTabAt(tabIndex)?.select()
     }
 
     private fun showErrorLayout(message: String?) {
@@ -164,27 +184,23 @@ class CategoryDetailsFragment : Fragment() {
         binding.errorLayout.isVisible = false
     }
 
-
-    //////////////////////////////////////////////////
     var onStartCategoryDetailsListener: OnStartCategoryDetailsListener? = null
-
     interface OnStartCategoryDetailsListener {
         fun onStartCategoryDetails(category: Category)
     }
 
-    var flag = false
+    /////////////////// Test Life Cycle ///////////////////
     override fun onStart() {
         super.onStart()
         Log.e("CDSTART", "CDSTART")
         onStartCategoryDetailsListener?.let {
             it.onStartCategoryDetails(category!!)
         }
-
     }
 
     override fun onResume() {
         super.onResume()
-        Log.e("CDResume", "CDResume")
+        Log.e("CDResume", "CDResume${flag}")
     }
 
     override fun onPause() {
@@ -222,8 +238,6 @@ class CategoryDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         Log.e("CDCreate", "CDCreate")
     }
-
-
 }
 
 

@@ -35,6 +35,12 @@ android {
         viewBinding = true
     }
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
 }
 
 dependencies {
@@ -49,6 +55,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation('com.akexorcist:localization:1.2.11') {
+        exclude group: 'androidx.core', module: 'core'
+    }
     implementation 'androidx.core:core-ktx:1.10.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

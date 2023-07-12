@@ -41,14 +41,12 @@ class CategoryFragment : Fragment() {
         }
     }
 
-
-    //////////////////////////////////////////////////
     var onStartCategoryListener: OnStartCategoryListener? = null
-
     interface OnStartCategoryListener {
         fun onStartCategory()
     }
 
+    /////////////////// Test Life Cycle ///////////////////
     override fun onStart() {
         super.onStart()
         Log.e("CFSTART", "CFSTART")
@@ -84,6 +82,5 @@ class CategoryFragment : Fragment() {
         super.onCreate(savedInstanceState)
         Log.e("CFCreate", "CFCreate")
     }
-
 
 }
