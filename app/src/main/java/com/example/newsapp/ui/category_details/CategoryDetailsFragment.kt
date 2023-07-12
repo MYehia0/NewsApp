@@ -59,6 +59,9 @@ class CategoryDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e("CDVCREAT", "CDVCREAT")
+        binding.tryAgain.setOnClickListener {
+            loadSources()
+        }
         if (flag) {
             bindSourcesInTabs(sourcesList)
         } else {
