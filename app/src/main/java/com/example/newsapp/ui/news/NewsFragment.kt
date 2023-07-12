@@ -52,6 +52,9 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("NFVCREAT", "NFVCREAT")
         binding.newsRecycler.adapter = adapter
+        binding.tryAgain.setOnClickListener {
+            loadNews()
+        }
         if (!flag) {
             loadNews()
         }
