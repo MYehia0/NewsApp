@@ -2,7 +2,6 @@ package com.example.newsapp.ui.category
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.newsapp.databinding.ItemCategoryBinding
@@ -19,16 +18,8 @@ class CategoryAdapter(val items: List<Category>) : Adapter<CategoryAdapter.Categ
 
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
         var item = items[position]
+        holder.Bind(item)
         holder.binding.apply {
-            text.text = text.resources.getText(item.name)
-            image.setImageResource(item.imageID)
-            container.setCardBackgroundColor(
-                ContextCompat.getColor(
-                    this.root.context,
-                    item.colorID
-                )
-            )
-
             root.setOnClickListener {
                 onItemClickListener?.let {
                     it.onItemClick(position, item)
@@ -43,5 +34,10 @@ class CategoryAdapter(val items: List<Category>) : Adapter<CategoryAdapter.Categ
         fun onItemClick(postion: Int, item: Category)
     }
 
-    class CategoryHolder(val binding: ItemCategoryBinding) : ViewHolder(binding.root)
+    class CategoryHolder(val binding: ItemCategoryBinding) : ViewHolder(binding.root) {
+        fun Bind(category: Category?) {
+            binding.category = category
+            binding.executePendingBindings()
+        }
+    }
 }
