@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.bumptech.glide.Glide
-import com.example.newsapp.R
 import com.example.newsapp.api.model.ArticlesItem
 import com.example.newsapp.databinding.ItemNewsBinding
 
@@ -17,15 +15,7 @@ class NewsAdapter(var items: List<ArticlesItem?>?) : Adapter<NewsAdapter.ViewHol
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items?.get(position)
-        holder.binding.title.text = item?.title
-        holder.binding.author.text = item?.author
-        holder.binding.time.text = item?.publishedAt
-
-        Glide.with(holder.itemView)
-            .load(item?.urlToImage)
-            .placeholder(R.drawable.ic_image)
-            .into(holder.binding.image)
-
+        holder.Bind(item)
         holder.binding.root.setOnClickListener {
             onItemClickListener?.let {
                 it.onItemClick(item!!)
@@ -47,5 +37,10 @@ class NewsAdapter(var items: List<ArticlesItem?>?) : Adapter<NewsAdapter.ViewHol
         fun onItemClick(article: ArticlesItem)
     }
 
-    class ViewHolder(val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {}
+    class ViewHolder(val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun Bind(article: ArticlesItem?) {
+            binding.news = article
+            binding.executePendingBindings()
+        }
+    }
 }

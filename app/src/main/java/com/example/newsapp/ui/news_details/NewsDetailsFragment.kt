@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.example.newsapp.R
 import com.example.newsapp.api.model.ArticlesItem
 import com.example.newsapp.databinding.FragmentNewsDetailsBinding
 
@@ -36,15 +34,8 @@ class NewsDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e("NDVCREAT", "NDVCREAT")
-        binding.title.text = article.title
-        binding.author.text = article.author
-        binding.time.text = article.publishedAt
-        binding.contentNews.text = article.description
-
-        Glide.with(binding.root)
-            .load(article.urlToImage)
-            .placeholder(R.drawable.ic_image)
-            .into(binding.image)
+        binding.news = article
+        binding.invalidateAll()
     }
 
 

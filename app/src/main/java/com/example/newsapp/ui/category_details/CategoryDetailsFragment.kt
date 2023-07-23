@@ -6,25 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.example.newsapp.Constants
+import androidx.lifecycle.ViewModelProvider
 import com.example.newsapp.R
-import com.example.newsapp.api.ApiManager
 import com.example.newsapp.api.model.ArticlesItem
 import com.example.newsapp.api.model.SourcesItem
-import com.example.newsapp.api.model.SourcesResponse
 import com.example.newsapp.databinding.FragmentCategoryDetailsBinding
 import com.example.newsapp.ui.category.Category
 import com.example.newsapp.ui.news.NewsFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
 class CategoryDetailsFragment : Fragment() {
     companion object {
         fun getInstance(category: Category): CategoryDetailsFragment {
@@ -37,12 +29,18 @@ class CategoryDetailsFragment : Fragment() {
     var category: Category? = null
     var tabIndex: Int = 0
     var flag = false
-    lateinit var sourcesList: List<SourcesItem?>
     lateinit var binding: FragmentCategoryDetailsBinding
     var onNewsDetailsListener: OnNewsDetailsListener? = null
 
     interface OnNewsDetailsListener {
         fun onNewsDetailsClick(article: ArticlesItem)
+    }
+
+    lateinit var viewModel: CategoryDetailsViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.e("CDCreate", "CDCreate")
+        viewModel = ViewModelProvider(this).get(CategoryDetailsViewModel::class.java)
     }
 
 
@@ -53,6 +51,8 @@ class CategoryDetailsFragment : Fragment() {
     ): View? {
         Log.e("CDCREATEView", "CDCREATEView")
         binding = FragmentCategoryDetailsBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner//
+        binding.viewModel = viewModel//
         return binding.root
     }
 
@@ -60,12 +60,24 @@ class CategoryDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("CDVCREAT", "CDVCREAT")
         binding.tryAgain.setOnClickListener {
-            loadSources()
+            viewModel.loadSources(category?.id ?: "")
         }
-        if (flag) {
-            bindSourcesInTabs(sourcesList)
-        } else {
-            loadSources()
+        if (!flag) {
+            subscribeToLiveData()
+            viewModel.loadSources(category?.id ?: "")
+        }
+        selectTab()
+    }
+
+    private fun subscribeToLiveData() {
+        viewModel.showLoadingLayout.observe(viewLifecycleOwner) {
+            showLoadingLayout(it)
+            if (it) {
+                hideErrorLayout()
+            }
+        }
+        viewModel.showErrorLayout.observe(viewLifecycleOwner) {
+            showErrorLayout(it)
         }
     }
 
@@ -82,60 +94,6 @@ class CategoryDetailsFragment : Fragment() {
             .beginTransaction()
             .replace(R.id.fragment_container, newsFragment)
             .commit()
-    }
-
-    private fun loadSources() {
-        showLoadingLayout()
-        // call news api
-        ApiManager.getApis()
-            .getSourcesByCategory(Constants.apiKey, category?.id)
-            .enqueue(object : Callback<SourcesResponse> {
-                override fun onResponse(
-                    call: Call<SourcesResponse>,
-                    response: Response<SourcesResponse>
-                ) {
-                    // ProgressBar is Gone
-                    binding.loadingIndicator.isVisible = false
-
-                    // response Success or not
-                    if (response.isSuccessful) {
-                        sourcesList = response.body()?.sources!!
-                        Log.e("Bind", "")
-                        bindSourcesInTabs(sourcesList)
-                    } else {
-                        // message error from json to sourceResponse object
-                        val gson = Gson()
-                        val errorResponse = gson.fromJson(
-                            response.errorBody()?.string(),
-                            SourcesResponse::class.java
-                        )
-                        showErrorLayout(errorResponse.message)
-                    }
-                }
-
-                override fun onFailure(call: Call<SourcesResponse>, t: Throwable) {
-                    // ProgressBar is Gone & show Error Layout
-                    binding.loadingIndicator.isVisible = false
-                    showErrorLayout(t.localizedMessage)
-                }
-
-            })
-    }
-
-    private fun bindSourcesInTabs(sourcesList: List<SourcesItem?>?) {
-        selectTab()
-        sourcesList?.forEach {
-            val tab = binding.tabLayout.newTab()
-            tab.text = it?.name
-            tab.tag = it
-            binding.tabLayout.addTab(tab)
-            val layoutParams = LinearLayout.LayoutParams(tab.view.layoutParams)
-            layoutParams.setMargins(20, 15, 20, 15)
-            tab.view.layoutParams = layoutParams
-        }
-        binding.tabLayout.selectTab(binding.tabLayout.getTabAt(tabIndex))
-        Log.e("select", "")
-        flag = false
     }
 
     private fun selectTab() {
@@ -180,14 +138,19 @@ class CategoryDetailsFragment : Fragment() {
     private fun showErrorLayout(message: String?) {
         binding.errorLayout.isVisible = true
         binding.errorMessage.text = message
+
     }
 
-    private fun showLoadingLayout() {
-        binding.loadingIndicator.isVisible = true
+    private fun showLoadingLayout(flag: Boolean) {
+        binding.loadingIndicator.isVisible = flag
+    }
+
+    private fun hideErrorLayout() {
         binding.errorLayout.isVisible = false
     }
 
     var onStartCategoryDetailsListener: OnStartCategoryDetailsListener? = null
+
     interface OnStartCategoryDetailsListener {
         fun onStartCategoryDetails(category: Category)
     }
@@ -204,6 +167,9 @@ class CategoryDetailsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.e("CDResume", "CDResume${flag}")
+        binding.tabLayout.selectTab(binding.tabLayout.getTabAt(tabIndex))
+        Log.e("select", "")
+        flag = false
     }
 
     override fun onPause() {
@@ -237,10 +203,6 @@ class CategoryDetailsFragment : Fragment() {
         Log.e("CDDestroyView", "CDDestroyView")
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.e("CDCreate", "CDCreate")
-    }
 }
 
 

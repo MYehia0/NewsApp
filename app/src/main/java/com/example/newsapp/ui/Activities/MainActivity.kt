@@ -1,4 +1,4 @@
-package com.example.newsapp.ui
+package com.example.newsapp.ui.Activities
 
 import android.content.Context
 import android.content.res.Resources
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.example.newsapp.Constants
@@ -39,8 +40,9 @@ class MainActivity : AppCompatActivity(),
         localizationDelegate.addOnLocaleChangedListener(this)
         localizationDelegate.onCreate()
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
         Log.e("MACREATE", "MACREATE")
 
 
@@ -56,14 +58,21 @@ class MainActivity : AppCompatActivity(),
                     showCategoryFragment()
                 }
                 R.id.settings_item -> {
-                    showSettingsFragment()
+                    val fragmrnt =
+                        supportFragmentManager.findFragmentById(R.id.fragment_container_main)
+                    if (fragmrnt !is SettingsFragment) {
+                        showSettingsFragment()
+                    }
                 }
             }
-            binding.root.closeDrawers()
+            binding.drawer.closeDrawers()
             return@setNavigationItemSelectedListener true
         }
 
         // begin Category Fragment
+        for (i in 1..supportFragmentManager.backStackEntryCount) {
+            supportFragmentManager.popBackStack()
+        }
         showCategoryFragment()
 
 //        if(Constant.STATE == "Category") {
@@ -81,9 +90,13 @@ class MainActivity : AppCompatActivity(),
 
     private fun showHamburgerIcon() {
         val toggle = ActionBarDrawerToggle(
-            this, binding.root, binding.toolbar, R.string.navigation_open, R.string.navigation_close
+            this,
+            binding.drawer,
+            binding.toolbar,
+            R.string.navigation_open,
+            R.string.navigation_close
         )
-        binding.root.addDrawerListener(toggle)
+        binding.drawer.addDrawerListener(toggle)
         toggle.syncState()
     }
 

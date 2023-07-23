@@ -8,16 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.example.newsapp.Constants
-import com.example.newsapp.api.ApiManager
+import androidx.lifecycle.ViewModelProvider
 import com.example.newsapp.api.model.ArticlesItem
-import com.example.newsapp.api.model.NewsResponse
 import com.example.newsapp.api.model.SourcesItem
 import com.example.newsapp.databinding.FragmentNewsBinding
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class NewsFragment : Fragment() {
     companion object {
@@ -31,11 +25,19 @@ class NewsFragment : Fragment() {
     lateinit var source: SourcesItem
     val adapter = NewsAdapter(null)
     lateinit var binding: FragmentNewsBinding
+    lateinit var articlesList: List<ArticlesItem?>
     var flag = false
     var onItemNewsListener: OnItemNewsListener? = null
 
     interface OnItemNewsListener {
         fun onNewsClick(article: ArticlesItem)
+    }
+
+    lateinit var viewModel: NewsViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.e("NFCreate", "NFCreate")
+        viewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -53,10 +55,14 @@ class NewsFragment : Fragment() {
         Log.e("NFVCREAT", "NFVCREAT")
         binding.newsRecycler.adapter = adapter
         binding.tryAgain.setOnClickListener {
-            loadNews()
+            viewModel.loadNews(source.id ?: "")
+            Log.e("tryAgain", "tryAgain")
         }
         if (!flag) {
-            loadNews()
+            subscribeToLiveData()
+            source.id?.let { viewModel.loadNews(it) }
+        } else {
+            adapter.changeData(articlesList)
         }
         adapter.onItemClickListener = object : NewsAdapter.OnItemClickListener {
             override fun onItemClick(article: ArticlesItem) {
@@ -67,53 +73,36 @@ class NewsFragment : Fragment() {
         }
     }
 
-    private fun loadNews() {
-        showLoadingLayout()
-        // call news api
-        ApiManager.getApis()
-            .getNews(Constants.apiKey, source.id)
-            .enqueue(object : Callback<NewsResponse> {
-                override fun onResponse(
-                    call: Call<NewsResponse>,
-                    response: Response<NewsResponse>
-                ) {
-                    // ProgressBar is Gone
-                    binding.loadingIndicator.isVisible = false
-
-                    // response Success or not
-                    if (response.isSuccessful) {
-                        adapter.changeData(response.body()?.articles)
-                    } else {
-                        // message error from json to sourceResponse object
-                        val gson = Gson()
-                        val errorResponse = gson.fromJson(
-                            response.errorBody()?.string(),
-                            NewsResponse::class.java
-                        )
-                        showErrorLayout(errorResponse.message)
-                    }
-                }
-
-                override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                    // ProgressBar is Gone & show Error Layout
-                    binding.loadingIndicator.isVisible = false
-                    showErrorLayout(t.localizedMessage)
-                }
-
-            })
+    private fun subscribeToLiveData() {
+        viewModel.showLoadingLayout.observe(viewLifecycleOwner) {
+            showLoadingLayout(it)
+            if (it) {
+                hideErrorLayout()
+            }
+        }
+        viewModel.showErrorLayout.observe(viewLifecycleOwner) {
+            showErrorLayout(it)
+        }
+        viewModel.articlesList.observe(viewLifecycleOwner) {
+            articlesList = it
+            adapter.changeData(articlesList)
+        }
     }
-
 
     private fun showErrorLayout(message: String?) {
         binding.errorLayout.isVisible = true
         binding.errorMessage.text = message
+        binding.newsRecycler.isVisible = false
     }
 
-    private fun showLoadingLayout() {
-        binding.loadingIndicator.isVisible = true
+    private fun showLoadingLayout(flag: Boolean) {
+        binding.loadingIndicator.isVisible = flag
+    }
+
+    private fun hideErrorLayout() {
         binding.errorLayout.isVisible = false
+        binding.newsRecycler.isVisible = true
     }
-
 
     /////////////////// Test Life Cycle ///////////////////
     override fun onStart() {
@@ -158,9 +147,5 @@ class NewsFragment : Fragment() {
         Log.e("NFDestroyView", "NFDestroyView")
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.e("NFCreate", "NFCreate")
-    }
 
 }
