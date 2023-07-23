@@ -56,7 +56,11 @@ class MainActivity : AppCompatActivity(),
                     showCategoryFragment()
                 }
                 R.id.settings_item -> {
-                    showSettingsFragment()
+                    val fragmrnt =
+                        supportFragmentManager.findFragmentById(R.id.fragment_container_main)
+                    if (fragmrnt !is SettingsFragment) {
+                        showSettingsFragment()
+                    }
                 }
             }
             binding.root.closeDrawers()
@@ -64,6 +68,9 @@ class MainActivity : AppCompatActivity(),
         }
 
         // begin Category Fragment
+        for (i in 1..supportFragmentManager.backStackEntryCount) {
+            supportFragmentManager.popBackStack()
+        }
         showCategoryFragment()
 
 //        if(Constant.STATE == "Category") {
