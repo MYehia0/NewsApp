@@ -1,7 +1,7 @@
 # News-App
 This app show news to you it has categories and each category has sources to get news from it so you can choose any category and any source to read it's news and you can read the article details when click on it also you can change the language from/to english or arabic.
 
-## **Topics**
+## ***Topics***
 #### Fragments
 #### Recycler View
 #### Retrofit
