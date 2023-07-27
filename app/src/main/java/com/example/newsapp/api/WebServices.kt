@@ -12,14 +12,14 @@ interface WebServices {
     fun getSources(@Query("apiKey") apiKey: String): Call<SourcesResponse>
 
     @GET("v2/top-headlines/sources")
-    fun getSourcesByCategory(
+    suspend fun getSourcesByCategory(
         @Query("apiKey") apiKey: String,
         @Query("category") category: String?
-    ): Call<SourcesResponse>
+    ): SourcesResponse
 
     @GET("v2/everything")
-    fun getNews(
+    suspend fun getNews(
         @Query("apiKey") apiKey: String,
         @Query("sources") source: String?
-    ): Call<NewsResponse>
+    ): NewsResponse
 }
