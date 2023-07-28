@@ -1,19 +1,19 @@
 # **News-App**
-'''
+~~~
 This app show news to you it has categories and each category has sources to get news from it so you can choose any category and any source to read it's news and you can read the article details when click on it also you can change the language from/to english or arabic.
-'''
+~~~
 
 ## **Topics**
-'''
-##### + Fragments
-##### + Recycler View
+
+##### - Fragments
+##### * Recycler View
 ##### + Retrofit
-##### + MVVM
-##### + Live Data
+##### - MVVM
+##### * Live Data
 ##### + Data binding
-##### + Kotlin Coroutines
-##### + Repository pattern
-'''
+##### - Kotlin Coroutines
+##### * Repository pattern
+
 
 
 ## **Images**
