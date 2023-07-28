@@ -13,10 +13,10 @@ This app show news to you it has categories and each category has sources to get
 
 
 # ***Images***
-![splash](https://github.com/MYehia0/NewsApp/assets/115104487/42d345f2-4774-49c1-8321-949bebafb458)
-![home](https://github.com/MYehia0/NewsApp/assets/115104487/a86ba54a-8fc9-4ac9-b89e-2db1c575fa40)
-![home –categorized](https://github.com/MYehia0/NewsApp/assets/115104487/c30284f5-5439-4591-83bf-562da727dff4)
-![Article](https://github.com/MYehia0/NewsApp/assets/115104487/baf50b3a-4edb-40ec-8be3-9196a6704fa5)
-![home –side menu](https://github.com/MYehia0/NewsApp/assets/115104487/a9ca1435-7f3f-43e3-9925-926f124723d3)
-![settings](https://github.com/MYehia0/NewsApp/assets/115104487/3acdabdb-e432-484a-a26b-67699e004618)
+![splash](https://github.com/MYehia0/NewsApp/assets/115104487/8ac5df36-1d21-4fa1-b3ad-5e95e04fe5a8)
+![home](https://github.com/MYehia0/NewsApp/assets/115104487/b1fb7e04-adf4-45f0-bf4a-e203f22fb93a)
+![home –categorized](https://github.com/MYehia0/NewsApp/assets/115104487/1faa6c5c-62e6-4cf8-9743-219b29109d24)
+![Article](https://github.com/MYehia0/NewsApp/assets/115104487/83158ff7-1059-4e70-9359-b3c17cc4ff77)
+![home –side menu](https://github.com/MYehia0/NewsApp/assets/115104487/fc0d9537-1cd1-44d6-aaf5-11fe31eb6234)
+![settings](https://github.com/MYehia0/NewsApp/assets/115104487/d9648009-293a-46a1-90af-a28bb8d80bb3)
 
