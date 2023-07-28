@@ -30,7 +30,7 @@
             android:id="@+id/author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{news.author}"
+            android:text="@{news.title}"
             android:textColor="@color/black"
             android:textSize="12sp"
             tools:text="this is title" />
@@ -39,7 +39,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{news.title}"
+            android:text="@{news.description}"
             android:textColor="@color/black"
             android:textSize="18sp"
             tools:text="this is title" />
