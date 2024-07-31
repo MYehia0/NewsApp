@@ -3,14 +3,18 @@ This app show news to you it has categories and each category has sources to get
 
 
 ## **Topics**
-+ ##### Fragments
-+ ##### Recycler View
-+ ##### Retrofit
++ ##### Clean Architecture
++ ##### DI with Hilt  
++ ##### Kotlin Coroutines
++ ##### Repository pattern
 + ##### MVVM
 + ##### Live Data
 + ##### Data binding
-+ ##### Kotlin Coroutines
-+ ##### Repository pattern
++ ##### Retrofit
++ ##### Fragments
++ ##### Recycler View
+
+
 
 
 ## **Images**
@@ -20,4 +24,3 @@ This app show news to you it has categories and each category has sources to get
 ![Article](https://github.com/MYehia0/NewsApp/assets/115104487/83158ff7-1059-4e70-9359-b3c17cc4ff77)
 ![home –side menu](https://github.com/MYehia0/NewsApp/assets/115104487/fc0d9537-1cd1-44d6-aaf5-11fe31eb6234)
 ![settings](https://github.com/MYehia0/NewsApp/assets/115104487/d9648009-293a-46a1-90af-a28bb8d80bb3)
-
