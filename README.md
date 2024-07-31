@@ -4,7 +4,7 @@ This app show news to you it has categories and each category has sources to get
 
 ## **Topics**
 + ##### Clean Architecture
-+ ##### DI with Hilt  
++ ##### Dependency Injection using Hilt
 + ##### Kotlin Coroutines
 + ##### Repository pattern
 + ##### MVVM
