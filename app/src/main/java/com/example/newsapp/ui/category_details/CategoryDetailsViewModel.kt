@@ -3,22 +3,21 @@ package com.example.newsapp.ui.category_details
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newsapp.api.ApiManager
-import com.example.newsapp.api.model.SourcesItem
-import com.example.newsapp.api.model.SourcesResponse
-import com.example.newsapp.repositories.source.SourceRemoteDataSourceImpl
-import com.example.newsapp.repositories.source.SourceRepositoryImpl
+import com.example.newsapp.data.datasources.model.SourcesItem
+import com.example.newsapp.data.datasources.model.SourcesResponse
+import com.example.newsapp.domain.usecases.source.GetSourcesInteractor
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class CategoryDetailsViewModel : ViewModel() {
+@HiltViewModel
+class CategoryDetailsViewModel @Inject constructor(private val getSourcesInteractor: GetSourcesInteractor) :
+    ViewModel() {
     val showLoadingLayout = MutableLiveData<Boolean>()
     val showErrorLayout = MutableLiveData<String>()
     val sourcesList = MutableLiveData<List<SourcesItem?>>()
-    private val apiManager = ApiManager.getApis()
-    private val sourceRemoteDataSource = SourceRemoteDataSourceImpl(apiManager)
-    private val sourceRepository = SourceRepositoryImpl(sourceRemoteDataSource)
 
     fun loadSources(categoryId: String) {
         // call news api
@@ -26,7 +25,7 @@ class CategoryDetailsViewModel : ViewModel() {
             showLoadingLayout.postValue(true)
             try {
                 // ProgressBar is Gone
-                val response = sourceRepository.getSourcesByCategory(categoryId)
+                val response = getSourcesInteractor(categoryId)
                 sourcesList.postValue(response!!)
                 showLoadingLayout.postValue(false)
             } catch (t: HttpException) {
@@ -43,37 +42,5 @@ class CategoryDetailsViewModel : ViewModel() {
                 showErrorLayout.postValue(ex.localizedMessage)
             }
         }
-
-//            .enqueue(object : Callback<SourcesResponse> {
-//                override fun onResponse(
-//                    call: Call<SourcesResponse>,
-//                    response: Response<SourcesResponse>
-//                ) {
-//                    // ProgressBar is Gone
-//                    showLoadingLayout.value = false
-//                    // response Success or not
-//                    if (response.isSuccessful) {
-//                        sourcesList.value = response.body()?.sources!!
-//                        Log.e("Bind", "")
-//                    } else {
-//                        // message error from json to sourceResponse object
-//                        val gson = Gson()
-//                        val errorResponse = gson.fromJson(
-//                            response.errorBody()?.string(),
-//                            SourcesResponse::class.java
-//                        )
-//                        showErrorLayout.value = errorResponse.message!!
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<SourcesResponse>, t: Throwable) {
-//                    // ProgressBar is Gone & show Error Layout
-//                    showLoadingLayout.value = false
-//                    showErrorLayout.value = t.localizedMessage
-//                }
-//
-//            })
-
     }
-
 }

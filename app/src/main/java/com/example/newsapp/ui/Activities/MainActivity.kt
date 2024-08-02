@@ -1,25 +1,25 @@
 package com.example.newsapp.ui.Activities
 
-import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
-import com.example.newsapp.Constants
 import com.example.newsapp.R
-import com.example.newsapp.api.model.ArticlesItem
+import com.example.newsapp.data.datasources.model.ArticlesItem
+import com.example.newsapp.data.datasources.remote.Constants
 import com.example.newsapp.databinding.ActivityMainBinding
 import com.example.newsapp.ui.category.Category
 import com.example.newsapp.ui.category.CategoryFragment
 import com.example.newsapp.ui.category_details.CategoryDetailsFragment
 import com.example.newsapp.ui.news_details.NewsDetailsFragment
 import com.example.newsapp.ui.settings.SettingsFragment
-import java.util.*
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     CategoryFragment.OnCategoryListener,
     CategoryDetailsFragment.OnNewsDetailsListener,
@@ -29,22 +29,16 @@ class MainActivity : AppCompatActivity(),
     SettingsFragment.OnLanguageClickListener,
     OnLocaleChangedListener {
 
-
     lateinit var binding: ActivityMainBinding
     val categoryFragment = CategoryFragment()
     val settingsFragment = SettingsFragment()
     private val localizationDelegate = LocalizationActivityDelegate(this)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         localizationDelegate.addOnLocaleChangedListener(this)
         localizationDelegate.onCreate()
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-        Log.e("MACREATE", "MACREATE")
-
 
         // hamburger icon in app bar
         showHamburgerIcon()
@@ -74,18 +68,6 @@ class MainActivity : AppCompatActivity(),
             supportFragmentManager.popBackStack()
         }
         showCategoryFragment()
-
-//        if(Constant.STATE == "Category") {
-//            for (i in 1..supportFragmentManager.backStackEntryCount) {
-//                supportFragmentManager.popBackStack()
-//            }
-//            Log.e("onRestoreInstanceState", "Category")
-//            showCategoryFragment()
-//        }else if(Constant.STATE == "Settings"){
-//            Log.e("onRestoreInstanceState", "Settings")
-//            showSettingsFragment()
-//        }
-
     }
 
     private fun showHamburgerIcon() {
@@ -107,7 +89,6 @@ class MainActivity : AppCompatActivity(),
             .beginTransaction()
             .replace(R.id.fragment_container_main, categoryFragment)
             .commit()
-
     }
 
     private fun showSettingsFragment() {
@@ -171,24 +152,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-
-//    @RequiresApi(Build.VERSION_CODES.N)
-//    fun setLocale(language:String){
-//        var metrics = resources.displayMetrics
-//        var configuration = resources.configuration
-//        configuration.locale = Locale(language)
-//        resources.updateConfiguration(configuration,metrics)
-//    }
-
     /////////////////// Language Methods ///////////////////
-    override fun attachBaseContext(newBase: Context) {
-        applyOverrideConfiguration(localizationDelegate.updateConfigurationLocale(newBase))
-        super.attachBaseContext(newBase)
-    }
-
-    override fun getApplicationContext(): Context {
-        return localizationDelegate.getApplicationContext(super.getApplicationContext())
-    }
 
     override fun getResources(): Resources {
         return localizationDelegate.getResources(super.getResources())
@@ -206,58 +170,10 @@ class MainActivity : AppCompatActivity(),
         get() = localizationDelegate.getLanguage(this)
 
     override fun onAfterLocaleChanged() {
-        Log.e("onAfterLocaleChanged()", "onAfterLocaleChanged()")
         Constants.STATE = "Category"
     }
 
     override fun onBeforeLocaleChanged() {
-        Log.e("onBeforeLocaleChanged", "onBeforeLocaleChanged")
         Constants.STATE = "Settings"
     }
-
-    /////////////////// Test Life Cycle ///////////////////
-    override fun onStart() {
-        super.onStart()
-        Log.e("MASTART", "MASTART")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e("MAPAUSE", "MAPAUSE")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.e("MASTOP", "MASTOP")
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.e("MARE", "MARE")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.e("MAResume", "MAResume")
-        localizationDelegate.onResume(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("MADestroy", "MADestroy")
-
-    }
-
-    ///////// back stack /////////
-//    override fun onBackPressed() {
-//        var fragment = supportFragmentManager.findFragmentById(R.id.fragment_container_main)
-//        if(fragment is CategoryFragment ){
-//            finish()
-//        }else{
-//            super.onBackPressed()
-//        }
-//
-//    }
-
-
 }

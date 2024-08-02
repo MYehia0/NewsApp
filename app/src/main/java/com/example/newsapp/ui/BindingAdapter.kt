@@ -7,15 +7,17 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.newsapp.R
-import com.example.newsapp.api.model.SourcesItem
+import com.example.newsapp.data.datasources.model.SourcesItem
 import com.google.android.material.tabs.TabLayout
 
 @BindingAdapter("imageUrl")
-fun loadImageUrl(imageView: ImageView,url:String){
-    Glide.with(imageView)
-        .load(url)
-        .placeholder(R.drawable.ic_image)
-        .into(imageView)
+fun loadImageUrl(imageView: ImageView, url: String?) {
+    url?.let {
+        Glide.with(imageView)
+            .load(url)
+            .placeholder(R.drawable.ic_image)
+            .into(imageView)
+    }
 }
 
 @BindingAdapter("CardBackgroundByID")

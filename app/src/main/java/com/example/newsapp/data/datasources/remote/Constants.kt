@@ -1,4 +1,4 @@
-package com.example.newsapp
+package com.example.newsapp.data.datasources.remote
 
 class Constants {
     companion object {

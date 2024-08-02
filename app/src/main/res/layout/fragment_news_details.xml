@@ -7,7 +7,7 @@
 
         <variable
             name="news"
-            type="com.example.newsapp.api.model.ArticlesItem" />
+            type="com.example.newsapp.data.datasources.model.ArticlesItem" />
     </data>
 
     <LinearLayout
@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <com.makeramen.roundedimageview.RoundedImageView
@@ -58,11 +59,13 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:cardBackgroundColor="@color/white"
             android:layout_margin="12dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/white"
                 android:layout_margin="12dp">
 
                 <ScrollView
