@@ -2,7 +2,6 @@ package com.example.newsapp.ui.settings
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,9 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentSettingsBinding
-import java.util.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingsFragment : Fragment() {
     lateinit var binding: FragmentSettingsBinding
     override fun onCreateView(
@@ -28,15 +28,14 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.languages_array,
-            android.R.layout.simple_spinner_item
+            R.layout.spinner_item
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
             // Apply the adapter to the spinner
             binding.settingsSpinner.adapter = adapter
         }
@@ -49,7 +48,6 @@ class SettingsFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                Log.e("", parent?.getItemAtPosition(position).toString())
                 val selectedLanguage = parent?.getItemAtPosition(position).toString()
                 onLanguageClickListener?.let { it.onLanguageClick(selectedLanguage) }
             }
@@ -69,6 +67,5 @@ class SettingsFragment : Fragment() {
     interface OnLanguageClickListener {
         fun onLanguageClick(language: String)
     }
-
 }
 
